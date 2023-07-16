@@ -21,6 +21,7 @@ export const GenerateUrl: React.FC<{}> = () => {
     const cfg: TeamsMeetingDetails =
     {
       activateAcsClientWebCam: webcam,
+      activateAcsClientMic: mic,
       joinUrl: joinUrl
     };
 

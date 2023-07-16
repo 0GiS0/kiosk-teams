@@ -3,14 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
-
-    <UserSecretsId>a1b5bce7-0bdb-4a62-a249-6cab421e3f9a</UserSecretsId>
-
     <StartupObject></StartupObject>
-
     <OutputType>Library</OutputType>
+    <UserSecretsId>0f12cf00-c0e9-4f5a-92d2-aa9764e695ff</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

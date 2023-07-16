@@ -1,7 +1,7 @@
 
 
 interface ServiceConfiguration {
-  clientTerminalName: string;
+  clientLocationInfo: LocationInfo;
   acsEndpointVal: string;
   acsAccessKeyVal: string;
 }
@@ -16,4 +16,10 @@ interface PlayListItem {
 interface TeamsMeetingDetails {
   joinUrl: string,
   activateAcsClientWebCam: boolean;
+  activateAcsClientMic: boolean;
+}
+
+interface LocationInfo {
+  name: string;
+  description: string;
 }

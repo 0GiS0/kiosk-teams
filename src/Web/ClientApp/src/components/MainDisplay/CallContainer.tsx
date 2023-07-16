@@ -21,7 +21,7 @@ export const CallContainer: React.FC<{ config: ServiceConfiguration, meeting: Te
         identityClient.createUserAndToken(["voip"]).then((userAndToken) => {
             const tokenCredential = new AzureCommunicationTokenCredential(userAndToken.token);
 
-            callClient.createCallAgent(tokenCredential, { displayName: props.config.clientTerminalName }).then(agent => {
+            callClient.createCallAgent(tokenCredential, { displayName: props.config.clientLocationInfo.name }).then(agent => {
                 setCallAgent(agent);
 
                 const joinOptions : JoinCallOptions = 

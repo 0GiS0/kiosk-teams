@@ -1,33 +1,55 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Entities;
+using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace Engine;
 
-public interface IClientNameResolver
+public class ClientNameResolver 
 {
-    string GetClientTerminalName(HttpContext context);
-}
+    private readonly ILocationIpRuleLoader _locationIpRuleLoader;
 
-public class HttpRequestClientNameResolver : IClientNameResolver
-{
-    public string GetClientTerminalName(HttpContext context)
+    public ClientNameResolver(ILocationIpRuleLoader locationIpRuleLoader)
     {
-        return GetIPAddress(context) == "::1" ? "local" : "remote";
+        _locationIpRuleLoader = locationIpRuleLoader;
     }
 
-
-    string? GetIPAddress(HttpContext context)
+    public async Task<LocationInfo> GetClientTerminalName()
     {
-        string ipAddress = context.Request.Headers["HTTP_X_FORWARDED_FOR"];
+        var rules = await _locationIpRuleLoader.LoadRules();
+        var clientIpStr = _locationIpRuleLoader.GetIpAddress();
 
-        if (!string.IsNullOrEmpty(ipAddress))
+
+        var matchingRules = new List<LocationIpRule>();
+        IPAddress? clientIp = null;
+        if (IPAddress.TryParse(clientIpStr, out clientIp))
         {
-            string[] addresses = ipAddress.Split(',');
-            if (addresses.Length != 0)
+            foreach (var rule in rules)
             {
-                return addresses[0];
+                IPAddress? ruleClientIp = null, ruleSubnetIp = null;
+                if (IPAddress.TryParse(rule.IpAddress, out ruleClientIp) && IPAddress.TryParse(rule.Subnet, out ruleSubnetIp))
+                {
+                    if (clientIp.IsInSameSubnet(ruleClientIp, ruleSubnetIp))
+                    {
+                        matchingRules.Add(rule);
+                    }
+                }
+            }
+
+            if (matchingRules.Count > 0)
+            {
+                var info = new LocationInfo
+                {
+                    Name = matchingRules.OrderBy(r => r.Order).First().Name,
+                    Description = clientIpStr ?? "No IP Address"
+                };
+                return info;
             }
         }
 
-        return context.Connection?.RemoteIpAddress?.ToString();
+        return new LocationInfo
+        {
+            Name = clientIpStr == "::1" ? "local" : "remote",
+            Description = clientIpStr ?? "No IP Address"
+        };
     }
 }

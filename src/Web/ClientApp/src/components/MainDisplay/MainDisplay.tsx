@@ -23,7 +23,7 @@ export const MainDisplay: React.FC<{}> = () => {
         console.log('Got service config from site API');
         setServiceConfiguration(storageConfigInfo);
 
-        const contentManager = new AppContentManager(storageConfigInfo.clientTerminalName, 5000, new ApiAppContentLoader());
+        const contentManager = new AppContentManager(storageConfigInfo.clientLocationInfo.name, 5000, new ApiAppContentLoader());
         contentManager.start((pli: PlayListItem) => {
 
           // New item to play. May or may not be a meeting.
@@ -53,11 +53,12 @@ export const MainDisplay: React.FC<{}> = () => {
 
   return (
     <div>
-      <h3>Now Showing on {serviceConfiguration?.clientTerminalName}</h3>
-
+      <h3>Now Showing on {serviceConfiguration?.clientLocationInfo.name}</h3>
+    
       {serviceConfiguration ?
         (
           <div>
+            <p>You are connected via {serviceConfiguration.clientLocationInfo.description}</p>
             {currentTeamsMeetingDetails ?
               <>
                 <CallContainer config={serviceConfiguration} meeting={currentTeamsMeetingDetails} />

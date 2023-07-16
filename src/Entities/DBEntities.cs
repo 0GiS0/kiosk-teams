@@ -11,7 +11,7 @@ public class PlayListItem : BaseDBObjectWithUrl
     public DateTime End { get; set; }
 }
 
-public class IpRule : BaseDBObject
+public class LocationIpRule : BaseDBObject
 {
     public string IpAddress { get; set; } = null!;
     public string Subnet { get; set; } = null!;

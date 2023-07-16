@@ -29,7 +29,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<PlayListItem> PlayList { get; set; } = null!;
-    public DbSet<IpRule> IpRules { get; set; } = null!;
+    public DbSet<LocationIpRule> LocationIpRules { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlServer(_config!.ConnectionStrings.SQLConnectionString, op => op.EnableRetryOnFailure());

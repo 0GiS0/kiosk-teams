@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 var config = new AppConfig(builder.Configuration);
 
 builder.Services.AddSingleton(config);
-builder.Services.AddSingleton<IClientNameResolver, HttpRequestClientNameResolver>();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ILocationIpRuleLoader, SqlAndHttpLocationIpRuleLoader>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(config.ConnectionStrings.SQLConnectionString));

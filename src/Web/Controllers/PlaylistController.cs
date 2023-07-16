@@ -49,23 +49,4 @@ public class PlaylistController : ControllerBase
             return onRightNow;
         }
     }
-
-
-    // POST: Playlist/now
-    [HttpPost()]
-    public async Task<ActionResult<PlayListItem>> NewTeamsMeeting(string scope)
-    {
-        if (string.IsNullOrEmpty(scope))
-        {
-            return BadRequest("No search term defined");
-        }
-        else
-        {
-            var onRightNow = await _context.PlayList
-                .Where(m => (m.Scope == null || m.Scope.ToLower() == scope.ToLower()) && m.Start <= DateTime.Now && m.End >= DateTime.Now)
-                .FirstOrDefaultAsync();
-
-            return onRightNow;
-        }
-    }
 }

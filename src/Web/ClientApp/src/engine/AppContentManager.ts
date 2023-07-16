@@ -16,15 +16,21 @@ export class AppContentManager {
 
     start(callBack: Function)
     {
+        this.loadCurrentPlaylistItem(callBack);
         setInterval(() => {
-            this._loader.loadCurrentItemUrl(this._scope).then(r=> 
-                {
-                    if (this._lastUrl !== r?.url) {
-                        this._lastUrl = r?.url;
-                        callBack(r);
-                    }
-                });
+            this.loadCurrentPlaylistItem(callBack);
           }, this._delay);
+    }
+
+    loadCurrentPlaylistItem(callBack: Function)
+    {
+        this._loader.loadCurrentItemUrl(this._scope).then(r=> 
+            {
+                if (this._lastUrl !== r?.url) {
+                    this._lastUrl = r?.url;
+                    callBack(r);
+                }
+            });
     }
 }
 

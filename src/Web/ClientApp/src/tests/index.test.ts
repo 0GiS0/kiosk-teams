@@ -31,7 +31,7 @@ describe('AppContentLoader tests', () => {
   test('TeamsMeetingDetails encoding', async () => {
 
     const meetingUrl = "1232"
-    const encodedUrl = getTeamsMeetingDetailsParam({activateAcsClientWebCam: true, joinUrl: meetingUrl});
+    const encodedUrl = getTeamsMeetingDetailsParam({activateAcsClientWebCam: true, activateAcsClientMic: false, joinUrl: meetingUrl});
     
     expect(encodedUrl && encodedUrl.length > 0).toBeTruthy();
     const decoded = getTeamsMeetingDetails(encodedUrl);

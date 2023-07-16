@@ -13,13 +13,13 @@ namespace Web.Controllers;
 [Route("[controller]")]
 public class AppConfigurationController : ControllerBase
 {
-    private readonly IClientNameResolver _clientNameResolver;
+    private readonly ILocationIpRuleLoader _locationIpRuleLoader;
     private readonly AppDbContext _context;
     private readonly AppConfig _config;
 
-    public AppConfigurationController(IClientNameResolver clientNameResolver, AppDbContext context, AppConfig config)
+    public AppConfigurationController(ILocationIpRuleLoader locationIpRuleLoader, AppDbContext context, AppConfig config)
     {
-        _clientNameResolver = clientNameResolver;
+        _locationIpRuleLoader = locationIpRuleLoader;
         this._context = context;
         this._config = config;
     }
@@ -27,15 +27,16 @@ public class AppConfigurationController : ControllerBase
     // Generate app ServiceConfiguration + storage configuration + key to read blobs
     // GET: AppConfiguration/ServiceConfiguration
     [HttpGet("[action]")]
-    public ActionResult<ServiceConfiguration> GetServiceConfiguration()
+    public async Task<ActionResult<ServiceConfiguration>> GetServiceConfiguration()
     {
+        var r = new ClientNameResolver(_locationIpRuleLoader);
+
         // Return for react app
         return new ServiceConfiguration
         {
-            ClientTerminalName = _clientNameResolver.GetClientTerminalName(HttpContext),
+            ClientLocationInfo = await r.GetClientTerminalName(),
             AcsAccessKeyVal = _config.AcsAccessKeyVal,
             AcsEndpointVal = _config.AcsEndpointVal
         };
     }
-
 }

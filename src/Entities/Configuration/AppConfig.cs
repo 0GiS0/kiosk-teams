@@ -14,6 +14,9 @@ public class AppConfig : BaseConfig
 
     [ConfigValue]
     public string AcsAccessKeyVal { get; set; } = null!;
+
+    [ConfigValue]
+    public string DefaultLocationName { get; set; }
 }
 
 public class ConfigException : Exception
